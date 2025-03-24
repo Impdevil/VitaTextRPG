@@ -55,7 +55,10 @@ void UISceneContainer::ElementGainFocus(std::string focusElementName){
     }
     // logToFile("potato2.7");
 }
-
+TextArea* UISceneContainer::GetElement(std::string elementName){
+    TextArea* element = uiElements[elementName].get();
+    return element;
+}
 
 void UISceneContainer::NavigateUI(UIDIRECTION dir){
     

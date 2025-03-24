@@ -31,7 +31,7 @@ class UISceneContainer{
     void ElementGainFocus(std::string);
     void Input(SceCtrlData ctrl);
     void Render();
-
+    TextArea* GetElement(std::string name);
 
 };
 
