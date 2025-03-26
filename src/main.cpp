@@ -19,10 +19,12 @@
 #include "TextArea.h"
 #include "UISceneContainer.h"
 #include "InputManager.h"
+#include "DungeonManager.h"
 using namespace std;
 
 
 UISceneContainer MainViewScene= UISceneContainer("MainViewScene");
+DungeonManager basicDungeon = DungeonManager();
 
 void initialize(){
 
@@ -63,14 +65,28 @@ void createGameScene(){
 	MainViewScene.AddUIElement(playerChoiceBox,true);
 }
 
+void makeBasicDungeon(){
+	DungeonRoom newRoom = DungeonRoom("e1","Entrance Room","A bright and airy room lit by candles.","the candles look like they have been burning for a little while.");
+	DungeonDoor newDoor = DungeonDoor("e1d1"," wooden Door", "A wooden door hangs from its hinges.", "It looks like its about to fall from the hinges, and the slight smell of mildew");
+	newRoom.AddDungeonDoor(&newDoor);
+	DungeonRoom newRoom1 = DungeonRoom("e2","Bed Room","A bed sits in the corner of the room","The bed isnt made, some of the covers lay on the floor, either someone was in a rush or they're lazy");
+	basicDungeon.AddDungeonRoom(&newRoom1);
+	newRoom.GetDungeonDoor("e1d1")->SetRoomConnection(&newRoom,&newRoom1);
+
+
+	basicDungeon.AttachNewUI(&MainViewScene);
+
+}
+
 int main(){
 	initialize();
 	createGameScene();
-	
+	makeBasicDungeon();
 
 	SceCtrlData ctrl;
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG);
 	bool running = true;
+	basicDungeon.UpdateRoomUI();
 	while(running){
 		sceCtrlPeekBufferPositive(0,&ctrl,1);
 		if (ctrl.buttons & SCE_CTRL_START){
