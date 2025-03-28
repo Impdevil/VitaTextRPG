@@ -10,7 +10,7 @@
 
 class DungeonManager{
     private:
-    std::unordered_map<std::string, DungeonObject> dungeonElements;
+    std::unordered_map<std::string, DungeonObject*> dungeonElements;
     std::string PlayerCurrentRoomID;
     UISceneContainer* uiContainer;
 

@@ -9,12 +9,11 @@
 // std::string roomDescription;
 // unordered_map <int,DungeonDoor> doorways;
 
-DungeonRoom::DungeonRoom(std::string roomID, std::string name, const std::string& Description, std:string inspectionString)
-:base(id(roomID),name(name), Description(Description),inspectionString(inspectionString){
+DungeonRoom::DungeonRoom(std::string roomID, std::string name, const std::string& Description, std::string inspectionString)
+:DungeonObject(id(roomID),name(name), Description(Description),inspectionString(inspectionString){
 
 }
 
-std::string 
 
 bool DungeonRoom::hasValidConnections()const{
     if (doorways.size() > 0){
@@ -112,7 +111,7 @@ std::string DungeonRoom::interactWithObject(ObjectOptions::ObjectOptions optionC
 
 
 DungeonDoor::DungeonDoor(std::string doorID, std::string name, const std::string& Description,std::string inspectionString)
-:base (id(doorID) ,name(name),Description(Description), inspectionString(inspectionString)) connectionType(DoorConnectionType::NormalDoor),
+:DungeonFeature (id(doorID) ,name(name),Description(Description), inspectionString(inspectionString)), connectionType(DoorConnectionType::NormalDoor),
 roomConnectionA(nullptr), roomConnectionB(nullptr), lockState(DoorState::Closed){}
 {
     
@@ -153,7 +152,7 @@ std::string DungeonDoor::interactWithObject(ObjectOptions::ObjectOptions optionC
 }
 virtual std::Vector<ObjectOptions::PlayerChoice> DungeonDoor::GenerateObjectOptions(ObjectOptions:ObjectOptions options){
     std::vector<ObjectOptions::PlayerChoice> newPlayerChoices =DungeonObject::GenerateObjectOptions();
-    objectOptions = options 
+    objectOptions = options;
     if(isOptionSet(objectOptions, ObjectOptions::PassThrough))
     {
         ObjectOptions::PlayerChoice PassThrough{
@@ -166,8 +165,7 @@ virtual std::Vector<ObjectOptions::PlayerChoice> DungeonDoor::GenerateObjectOpti
         newPlayerChoices.push_back(PassThrough);
 
     }
-    return newPlayerChoices
+    return newPlayerChoices;
 }
 
-#pragma endregion
 #pragma endregion

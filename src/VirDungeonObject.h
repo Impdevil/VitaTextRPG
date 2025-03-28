@@ -3,13 +3,12 @@
 #include "ObjectOptions.h"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class DungeonObject{
-    private:
+    protected:
     std::string id;
     std::string name;
-
-    protected:
     ObjectOptions objectOptions;// bitmask for all options attached to this object
     std::string Description;// base description of the object upon reaching it(rooms description followed by door ways)
     std::string inspectionString;// describes room in more detail, hinting at features and revealing more options 

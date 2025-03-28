@@ -20,6 +20,7 @@
 #include "UISceneContainer.h"
 #include "InputManager.h"
 #include "DungeonManager.h"
+#include "DungeonRoom.h"
 using namespace std;
 
 
@@ -66,7 +67,7 @@ void createGameScene(){
 }
 
 void makeBasicDungeon(){
-	DungeonRoom newRoom = DungeonRoom("e1","Entrance Room","A bright and airy room lit by candles.","the candles look like they have been burning for a little while.");
+	DungeonRoom newRoom = DungeonRoom(std::string("e1"),std::string("Entrance Room"),std::string("A bright and airy room lit by candles."),std::string("the candles look like they have been burning for a little while."));
 	DungeonDoor newDoor = DungeonDoor("e1d1"," wooden Door", "A wooden door hangs from its hinges.", "It looks like its about to fall from the hinges, and the slight smell of mildew");
 	newRoom.AddDungeonDoor(&newDoor);
 	DungeonRoom newRoom1 = DungeonRoom("e2","Bed Room","A bed sits in the corner of the room","The bed isnt made, some of the covers lay on the floor, either someone was in a rush or they're lazy");

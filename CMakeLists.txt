@@ -54,6 +54,9 @@ add_executable(${PROJECT_NAME}
   src/DebugLogging.cpp
   src/UISceneContainer.cpp
   src/InputManager.cpp
+  src/DungeonManager.cpp
+  src/DungeonRoom.cpp
+  src/VirDungeonObject.cpp
 )
 
 # Library to link to (drop the -l prefix). This will mostly be stubs.

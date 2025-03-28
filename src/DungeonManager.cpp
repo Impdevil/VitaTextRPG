@@ -25,7 +25,7 @@ void DungeonManager::MoveToRoom(std::string roomID){
 }
 
 void DungeonManager::TraverseRoom(std::string doorID){
-    std::string newRoomId = dungeonElements.at(doorID).GetOtherRoom(dungeonElements.at(PlayerCurrentRoomID))->GetID();
+    std::string newRoomId = dynamic_cast<DungeonDoor*>(dungeonElements.at(doorID))->GetOtherRoom(dynamic_cast<DungeonRoom*>(dungeonElements.at(PlayerCurrentRoomID)))->GetID();
     PlayerCurrentRoomID = newRoomId;
     GetRoomDescription();
     GetRoomAvalibleOptions();
@@ -34,15 +34,16 @@ void DungeonManager::TraverseRoom(std::string doorID){
 
 
 std::string DungeonManager::GetRoomDescription(){
-    dungeonElements.at(PlayerCurrentRoomID).GetObjectOptions();
+    //return dungeonElements.at(PlayerCurrentRoomID)->GetObjectOptions();
+    return std::string("potato");
 }
 void DungeonManager::GetRoomAvalibleOptions(){
-    dungeonElements.at(PlayerCurrentRoomID).GetObjectOptions();
+    dungeonElements.at(PlayerCurrentRoomID)->GetObjectOptions();
 }
 void DungeonManager::AttachNewUI(UISceneContainer* container){
     uiContainer = container;
 }
 void DungeonManager::UpdateRoomUI(){
-    uiContainer.GetElement("MainTextBox")->addText(GetRoomDescription());
+    uiContainer->GetElement("MainTextBox")->AddText(GetRoomDescription());
     //GetRoomAvalibleOptions(PlayerCurrentRoomID);
 }
