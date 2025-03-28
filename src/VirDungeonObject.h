@@ -9,10 +9,10 @@ class DungeonObject{
     protected:
     std::string id;
     std::string name;
-    ObjectOptions objectOptions;// bitmask for all options attached to this object
-    std::string Description;// base description of the object upon reaching it(rooms description followed by door ways)
+    uint32_t objectOptions;// bitmask for all options attached to this object
+    std::string description;// base description of the object upon reaching it(rooms description followed by door ways)
     std::string inspectionString;// describes room in more detail, hinting at features and revealing more options 
-    PlayerChoice playerChoices;
+    std::vector<PlayerChoice> playerChoices;
     public:
     DungeonObject(std::string id, std::string name, std::string Description, std::string inspectionString);
     virtual ~DungeonObject();
@@ -21,10 +21,10 @@ class DungeonObject{
     std::string GetName();
     virtual std::string GetObjectDescription();
     virtual std::string GetInspectionDescription();
-    uint32_t SetObjectOption(int32_t options);
+    void SetObjectOption(int32_t options);
+    bool isOptionSet(uint32_t bitmask, ObjectOptions option);
 
-
-    virtual std::vector<PlayerChoice> GenerateObjectOptions(ObjectOptions options);
+    virtual std::vector<PlayerChoice> GenerateObjectOptions(uint32_t options);
     virtual std::vector<PlayerChoice> GetObjectOptions();
 
     virtual std::string interactWithObject(ObjectOptions optionChoice);
@@ -38,7 +38,7 @@ class DungeonFeature: public DungeonObject{
     bool discoverible;//means that the feature is shown upon entering the room that its held within if the room is inspected
     bool interactive;
     public:
-    DungeonFeature(int doorID,std::string name, const std::string& Description,std::string inspectionString);
+    DungeonFeature(std::string id,std::string name, const std::string& Description,std::string inspectionString);
     bool GetDiscoverible();
 
 };

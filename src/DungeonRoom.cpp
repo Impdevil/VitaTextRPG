@@ -10,7 +10,7 @@
 // unordered_map <int,DungeonDoor> doorways;
 
 DungeonRoom::DungeonRoom(std::string roomID, std::string name, const std::string& Description, std::string inspectionString)
-:DungeonObject(id(roomID),name(name), Description(Description),inspectionString(inspectionString){
+:DungeonObject(roomID,name, Description,inspectionString){
 
 }
 
@@ -25,71 +25,69 @@ DungeonDoor* DungeonRoom::GetDungeonDoor(std::string id){
     return doorways.at(id);
 }
 void DungeonRoom::AddDungeonDoor(DungeonDoor* newdoorway){
-    newdoorway
-    doorways.emplace(newdoorway->GetID(),newdoorway)
 
+    doorways.emplace(newdoorway->GetID(),newdoorway);
 }
-DungeonFeature* DungeonRoom::GetDungeonFeature(int id){
+DungeonFeature* DungeonRoom::GetDungeonFeature(std::string id){
     return doorways.at(id);
 }
 void DungeonRoom::AddDungeonFeature(DungeonFeature* newFeature){
-    dungeonFeature.emplace(newFeature->GetID(),newFeature)
+    dungeonFeature.emplace(newFeature->GetID(),newFeature);
 }
 
 std::string DungeonRoom::GetRoomEntryDescription(){
     std::string roomEntryDescription="";
     ///string setup Room description, discoverable features, doors. 
     roomEntryDescription = GetObjectDescription();
-    for(auto&:dungeonFeature){
-        if (pair.second.GetDiscoverible()){
-            roomEntryDescription += pair.second.GetObjectDescription();
+    for(auto& pair:dungeonFeature){
+        if (pair.second->GetDiscoverible()){
+            roomEntryDescription += pair.second->GetObjectDescription();
         }
     }
-    for(auto&:doorways){
-        if (pair.second.GetDiscoverible()){
-            roomEntryDescription += pair.second.GetObjectDescription();
+    for(auto& pair:doorways){
+        if (pair.second->GetDiscoverible()){
+            roomEntryDescription += pair.second->GetObjectDescription();
         }
     }
-}
-
-std::string DungeonRoom::GetRoomInspectDescription(){
-    //room inspection description, undiscoverable features description.
-    roomEntryDescription = GetInspectionDescription();
-
+    return roomEntryDescription;
 }
 
 
 
-virtual std::Vector<ObjectOptions::PlayerChoice> DungeonRoom::GetObjectOptions(){
-    std::vector<ObjectOptions::PlayerChoice> newPlayerChoices =DungeonObject::GetObjectOptions();
+
+
+std::vector<PlayerChoice> DungeonRoom::GetObjectOptions(){
+    std::vector<PlayerChoice> newPlayerChoices =DungeonObject::GetObjectOptions();
     
-    std::vector<ObjectOptions::PlayerChoice> dungeonFeaturesOptions;
-    for(auto&:dungeonFeature){
-        if (pair.second.GetDiscoverible()){
-            dungeonFeaturesOptions = second.GetObjectOptions();
-            newPlayerChoices.insert(newPlayerChoices.end(), dungeonFeaturesOptions.start(),dungeonFeaturesOptions.end());
+    std::vector<PlayerChoice> dungeonFeaturesOptions;
+    for(auto& pair:dungeonFeature){
+        if (pair.second->GetDiscoverible()){
+            dungeonFeaturesOptions = pair.second->GetObjectOptions();
+            newPlayerChoices.insert(newPlayerChoices.end(), dungeonFeaturesOptions.begin(),dungeonFeaturesOptions.end());
         }
     }
-    std::vector<ObjectOptions::PlayerChoice> dungeonDoorwaysOptions;
 
-    for(auto&:doorways){
-        if (pair.second.GetDiscoverible()){
-            dungeonDoorwaysOptions = second.GetObjectOptions();
-            newPlayerChoices.insert(newPlayerChoices.end(), dungeonDoorwaysOptions.start(),dungeonDoorwaysOptions.end());
+    std::vector<PlayerChoice> dungeonDoorwaysOptions;
+    for(auto& pair:doorways){
+        if (pair.second->GetDiscoverible()){
+            dungeonDoorwaysOptions = pair.second->GetObjectOptions();
+            newPlayerChoices.insert(newPlayerChoices.end(), dungeonDoorwaysOptions.begin(),dungeonDoorwaysOptions.end());
         }
     }
-    return newPlayerChoices
+    return newPlayerChoices;
 }
 
-std::string DungeonRoom::interactWithObject(ObjectOptions::ObjectOptions optionChoice){
-    switch (option) {
+std::string DungeonRoom::interactWithObject(ObjectOptions optionChoice){
+    std::string returnString;
+    switch (optionChoice) {
         case ObjectOptions::Inspect:
-                GetInspectionDescription();
+            returnString = GetInspectionDescription();
             break;
         default:
-            logToFile("This action is not possible for the door!");
+            //logToFile("This action is not possible for the door!");
             break;
     }
+    return returnString;
 }
 #pragma endregion
 
@@ -111,13 +109,11 @@ std::string DungeonRoom::interactWithObject(ObjectOptions::ObjectOptions optionC
 
 
 DungeonDoor::DungeonDoor(std::string doorID, std::string name, const std::string& Description,std::string inspectionString)
-:DungeonFeature (id(doorID) ,name(name),Description(Description), inspectionString(inspectionString)), connectionType(DoorConnectionType::NormalDoor),
+: DungeonFeature(doorID ,name,Description, inspectionString), connectionType(DoorConnectionType::NormalDoor),
 roomConnectionA(nullptr), roomConnectionB(nullptr), lockState(DoorState::Closed){}
-{
-    
-}
 
-void SetRoomConnection(DungeonRoom* connectedRoomA,DungeonRoom* connectedRoomB){
+
+void DungeonDoor::SetRoomConnection(DungeonRoom* connectedRoomA,DungeonRoom* connectedRoomB){
     roomConnectionA = connectedRoomA;
     roomConnectionB = connectedRoomB;
 }
@@ -128,43 +124,46 @@ DungeonRoom* DungeonDoor::GetConnectedRoomB(){
     return roomConnectionB;
 }
 DungeonRoom* DungeonDoor::GetOtherRoom(DungeonRoom* fromRoom){
-    if (GetConnectedRoomA == fromRoom) return GetConnectedRoomB();
-    if (GetConnectedRoomB == fromRoom) return GetConnectedRoomA();
+    if (GetConnectedRoomA() == fromRoom) return GetConnectedRoomB();
+    if (GetConnectedRoomB() == fromRoom) return GetConnectedRoomA();
     return nullptr;
 
 }
 bool DungeonDoor::isLocked(){
     if (lockState == DoorState::Locked)
         return true;
+    else return false;
 }
-void DungeonDoor::SetdoorState(DoorState state){
-    lockState = state
+void DungeonDoor::SetDoorState(DoorState state){
+    lockState = state;
 }
-std::string DungeonDoor::interactWithObject(ObjectOptions::ObjectOptions optionChoice){
-    switch (option) {
+std::string DungeonDoor::interactWithObject(ObjectOptions optionChoice){
+    std::string returnString;
+    switch (optionChoice) {
         case ObjectOptions::Inspect:
-                GetInspectionDescription();
+            GetInspectionDescription();
             break;
         default:
-            logToFile("This action is not possible for the door!");
+            //logToFile("This action is not possible for the door!");
             break;
     }
+    return returnString;
 }
-virtual std::Vector<ObjectOptions::PlayerChoice> DungeonDoor::GenerateObjectOptions(ObjectOptions:ObjectOptions options){
-    std::vector<ObjectOptions::PlayerChoice> newPlayerChoices =DungeonObject::GenerateObjectOptions();
-    objectOptions = options;
-    if(isOptionSet(objectOptions, ObjectOptions::PassThrough))
+std::vector<PlayerChoice> DungeonDoor::GenerateObjectOptions(uint32_t options){
+    std::vector<PlayerChoice> newPlayerChoices =DungeonObject::GenerateObjectOptions(options);
+
+    if(DungeonObject::isOptionSet(objectOptions, ObjectOptions::PassThrough))
     {
-        ObjectOptions::PlayerChoice PassThrough{
+        PlayerChoice passThrough{
             ObjectOptions::PassThrough,
             "Go through " + GetName(),
             true,
             0,
             this
         };
-        newPlayerChoices.push_back(PassThrough);
-
+        newPlayerChoices.push_back(passThrough);
     }
+    playerChoices = newPlayerChoices;
     return newPlayerChoices;
 }
 
