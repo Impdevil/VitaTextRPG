@@ -53,7 +53,9 @@ std::string DungeonRoom::GetRoomEntryDescription(){
 }
 
 
-
+std::vector<PlayerChoice> DungeonRoom::GenerateObjectOptions(uint32_t options) {
+    return DungeonObject::GenerateObjectOptions(options); // Optionally call the base class implementation
+}
 
 
 std::vector<PlayerChoice> DungeonRoom::GetObjectOptions(){

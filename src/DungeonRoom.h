@@ -25,7 +25,7 @@ class DungeonRoom:public DungeonObject{
     DungeonFeature* GetDungeonFeature(std::string);
     void AddDungeonFeature(DungeonFeature* newFeature);
 
-    std::vector<PlayerChoice> GenerateObjectOptions(int32_t options);
+    std::vector<PlayerChoice> GenerateObjectOptions(uint32_t options);
     std::vector<PlayerChoice> GetObjectOptions();
 
     std::string GetRoomEntryDescription();
@@ -61,8 +61,8 @@ class DungeonDoor:public DungeonFeature{
     DungeonRoom* GetOtherRoom(DungeonRoom* fromRoom);
     bool isLocked();
     void SetDoorState(DoorState state);
+    std::vector<PlayerChoice> GenerateObjectOptions(uint32_t options);
     virtual std::string interactWithObject(ObjectOptions optionChoice);
-    virtual std::vector<PlayerChoice> GenerateObjectOptions(uint32_t options);
 };
 
 
