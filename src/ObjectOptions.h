@@ -2,7 +2,11 @@
 #define OBJECTOPTIONS_H
 
 #include <string>
+#include "DebugLogging.h"
+//#include "VirDungeonObject.h"
+
 class DungeonObject;
+class DungeonManager;
 
 enum class ObjectOptions : uint32_t {///bitmask
     None            = 0b00000000,  // No options available
@@ -20,7 +24,10 @@ struct PlayerChoice{
     int priority;
     DungeonObject* attachedObject;
     std::string id;
+    DungeonManager* dungeonManager;
+
     void UseAttachedObject();
+    std::string ObjectOptionsToString(ObjectOptions option);
 
 };
 

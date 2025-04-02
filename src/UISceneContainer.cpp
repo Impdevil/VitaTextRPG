@@ -2,11 +2,12 @@
 
 #include "DebugLogging.h"
 
-///refernces
-///uiElements[currFocusKey]->
 
-UISceneContainer::UISceneContainer(std::string name): currFocusKey(""){
 
+UISceneContainer::UISceneContainer(std::string name): currFocusKey(""),name(name){  
+}
+UISceneContainer::~UISceneContainer() {
+    logToFile(("UISceneContainer destroyed: " + name).c_str());
 }
 void UISceneContainer::AddUIElement(std::shared_ptr<TextArea> newElement,bool elementPullsFocus){
     logToFile(newElement->GetName().c_str());
@@ -25,9 +26,15 @@ void UISceneContainer::AddUIElement(std::shared_ptr<TextArea> newElement,bool el
 void UISceneContainer::RemoveUIElement(std::string name){
 
 }
+
+
+std::string UISceneContainer::GetName(){
+    return name;
+}
+
 void UISceneContainer::ElementLoseFocus(){
     if (!currFocusStack.empty()){
-        logToFile(("potato2.3 currFocusKey set to: " + currFocusKey).c_str());
+        logToFile(("ElementLoseFocus.3 currFocusKey set to: " + currFocusKey).c_str());
         uiElements[currFocusStack.top()]->LoseFocus();
         // logToFile("potato2.4");
 
@@ -39,10 +46,10 @@ void UISceneContainer::ElementLoseFocus(){
         // /logToFile("potato2.4.2");
     }
 }
-void UISceneContainer::ElementGainFocus(std::string focusElementName){
+void UISceneContainer::ElementGainFocus(std::string focusElementName,bool isPopUp){
     // logToFile("potato2.5");
-    if (!currFocusStack.empty()){
-        uiElements[currFocusStack.top()]->LoseFocus();
+    if (!isPopUp){
+        ElementLoseFocus();
     }
     currFocusKey = focusElementName;
     currFocusStack.push(currFocusKey);
@@ -62,13 +69,13 @@ TextArea* UISceneContainer::GetElement(std::string elementName){
 
 void UISceneContainer::NavigateUI(UIDIRECTION dir){
     
-    //logToFile(("potato2 currFocusKey set to: " + currFocusKey).c_str());
-    //logToFile(("potato2.1: moving in dir:" + std::to_string(dir)).c_str());
+    logToFile(("UISceneContainer.NavigateUI currFocusKey set to: " + currFocusKey).c_str());
+    logToFile(("UISceneContainer.NavigateUI.1: player focus moving in dir:" + std::to_string(dir)).c_str());
     if (uiElements.find(uiElements[currFocusKey]->GetUIConnection(dir)) != uiElements.end()){
-        //logToFile(("potato2.1 moving to: " + uiElements[currFocusKey]->GetUIConnection(dir)).c_str());
+        //logToFile(("UISceneContainer.NavigateUI.1 moving to: " + uiElements[currFocusKey]->GetUIConnection(dir)).c_str());
         std::weak_ptr<TextArea> weakFocus = uiElements.at(uiElements[currFocusKey]->GetUIConnection(dir));
         if (auto newFocus = weakFocus.lock()) {
-            //logToFile(("potato2.1 currFocusKey set to: " + currFocusKey).c_str());
+            //logToFile(("UISceneContainer.NavigateUI.1 currFocusKey set to: " + currFocusKey).c_str());
 
             if (newFocus->GetFocusable()){
                 ElementLoseFocus();
@@ -78,7 +85,8 @@ void UISceneContainer::NavigateUI(UIDIRECTION dir){
         }
     } 
     else {
-        logToFile("Error: The element no longer exists or was removed! or never existed in the first place maybe");
+        //logToFile("Error: The element no longer exists or was removed! or never existed in the first place maybe");
+        return;
     }
 }
 

@@ -9,7 +9,7 @@
 #include "DebugLogging.h"
 #include <psp2/ctrl.h>
 #include "InputManager.h"
-
+#include "ObjectOptions.h"
 
 /*
     used to create basic text boxes.
@@ -90,12 +90,15 @@ class TextArea_SelectableItems : public TextArea{
     private:
     std::vector<SelectableTextItem> textItems;
     SelectableTextItem* selectedTextItem = nullptr;
+    std::vector<PlayerChoice> playerChoices;
     int focusedIndex;    
     mutable int displayedLines;
     public:
     TextArea_SelectableItems(int x, int y, int w, int h, const std::string &name, const std::string & initialText);
     TextArea_SelectableItems(int x, int y, int w, int h, const std::string &name, const std::string & initialText,UISceneContainer* owner);
     void AddTextItem(const std::string &newline);
+    void AddTextItemsGroup(std::vector<PlayerChoice> playerChoices);
+    void ClearSelectableTextItems();
     void FocusedScroll(int direction);
     void AdjustScroll();
     void Render() const;

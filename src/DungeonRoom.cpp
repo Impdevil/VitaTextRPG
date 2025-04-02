@@ -1,5 +1,6 @@
 
 #include "DungeonRoom.h"
+#include "DungeonManager.h"
 
 
 #pragma region Dungeon Room
@@ -25,11 +26,10 @@ DungeonDoor* DungeonRoom::GetDungeonDoor(std::string id){
     return doorways.at(id);
 }
 void DungeonRoom::AddDungeonDoor(DungeonDoor* newdoorway){
-
     doorways.emplace(newdoorway->GetID(),newdoorway);
 }
 DungeonFeature* DungeonRoom::GetDungeonFeature(std::string id){
-    return doorways.at(id);
+    return dungeonFeature.at(id);
 }
 void DungeonRoom::AddDungeonFeature(DungeonFeature* newFeature){
     dungeonFeature.emplace(newFeature->GetID(),newFeature);
@@ -39,16 +39,21 @@ std::string DungeonRoom::GetRoomEntryDescription(){
     std::string roomEntryDescription="";
     ///string setup Room description, discoverable features, doors. 
     roomEntryDescription = GetObjectDescription();
+    logToFile(("dungeonFeature size: " + std::to_string(dungeonFeature.size())).c_str());
     for(auto& pair:dungeonFeature){
         if (pair.second->GetDiscoverible()){
-            roomEntryDescription += pair.second->GetObjectDescription();
+            roomEntryDescription += " " + pair.second->GetObjectDescription();
         }
     }
+    logToFile(("doorways size: " + std::to_string(doorways.size())).c_str());
+
     for(auto& pair:doorways){
         if (pair.second->GetDiscoverible()){
-            roomEntryDescription += pair.second->GetObjectDescription();
+            roomEntryDescription +=  " " + pair.second->GetObjectDescription();
         }
     }
+    logToFile(roomEntryDescription.c_str());
+
     return roomEntryDescription;
 }
 
@@ -84,9 +89,10 @@ std::string DungeonRoom::interactWithObject(ObjectOptions optionChoice){
     switch (optionChoice) {
         case ObjectOptions::Inspect:
             returnString = GetInspectionDescription();
+            logToFile(("DungeonRoom::interactWithObject GetUIContainer"+dungeonManager->GetUIContainer()->GetName()).c_str());
             break;
         default:
-            //logToFile("This action is not possible for the door!");
+            //logToFile("This action is not possible for the room!");
             break;
     }
     return returnString;
@@ -112,7 +118,14 @@ std::string DungeonRoom::interactWithObject(ObjectOptions optionChoice){
 
 DungeonDoor::DungeonDoor(std::string doorID, std::string name, const std::string& Description,std::string inspectionString)
 : DungeonFeature(doorID ,name,Description, inspectionString), connectionType(DoorConnectionType::NormalDoor),
-roomConnectionA(nullptr), roomConnectionB(nullptr), lockState(DoorState::Closed){}
+roomConnectionA(nullptr), roomConnectionB(nullptr), lockState(DoorState::Closed){
+    if(connectionType != DoorConnectionType::Secret){
+        discoverible = true;
+    }else{
+        discoverible = false;
+        logToFile("Door is not discoverible");
+    }
+}
 
 
 void DungeonDoor::SetRoomConnection(DungeonRoom* connectedRoomA,DungeonRoom* connectedRoomB){
@@ -143,7 +156,16 @@ std::string DungeonDoor::interactWithObject(ObjectOptions optionChoice){
     std::string returnString;
     switch (optionChoice) {
         case ObjectOptions::Inspect:
-            GetInspectionDescription();
+            returnString = GetInspectionDescription();
+            break;
+        case ObjectOptions::PassThrough:
+            if (roomConnectionA != nullptr && roomConnectionB != nullptr){
+                dungeonManager->SendDataToUI("You pass through the door.");
+                dungeonManager->TraverseRoom(GetID());
+                //returnString = "You pass through the door.";///// can be used if the room has a trigger after the door closes.
+            }else{
+                returnString = "The door is not connected to any rooms.";
+            }
             break;
         default:
             //logToFile("This action is not possible for the door!");
@@ -161,7 +183,9 @@ std::vector<PlayerChoice> DungeonDoor::GenerateObjectOptions(uint32_t options){
             "Go through " + GetName(),
             true,
             0,
-            this
+            this,
+            GetID(),
+            dungeonManager
         };
         newPlayerChoices.push_back(passThrough);
     }

@@ -8,12 +8,14 @@ DungeonObject::DungeonObject(std::string id,std::string name,  std::string Descr
 }
 
 
-std::string DungeonObject::GetName()                        {return name;}
-std::string DungeonObject::GetID()                          {return id;}
-std::string DungeonObject::GetObjectDescription()           {return description;}
-std::string DungeonObject::GetInspectionDescription()       {return inspectionString;}
-void DungeonObject::SetObjectOption(int32_t options)    {objectOptions = options;}
+std::string DungeonObject::GetName()                            {return name;}
+std::string DungeonObject::GetID()                              {return id;}
+std::string DungeonObject::GetObjectDescription()               {return description;}
+std::string DungeonObject::GetInspectionDescription()           {return inspectionString;}
 
+void DungeonObject::SetObjectOption(int32_t options)            {objectOptions = options;}
+void DungeonObject::SetDungeonManager(DungeonManager* manager)  {dungeonManager = manager;};
+DungeonManager* DungeonObject::GetDungeonManager()           {return dungeonManager;};
 DungeonObject::~DungeonObject() {
     // Destructor implementation
     
@@ -29,7 +31,9 @@ std::vector<PlayerChoice> DungeonObject::GenerateObjectOptions(uint32_t options)
                 "Inspect " + GetName(),
                 true,
                 0,
-                this
+                this,
+                GetID(),
+                dungeonManager
             };
         newPlayerChoices.push_back(inspectOption);
 
@@ -52,7 +56,7 @@ std::string DungeonObject::interactWithObject(ObjectOptions optionChoice){
     std::string returnString;
     switch (optionChoice) {
         case ObjectOptions::Inspect:
-            GetInspectionDescription();
+            returnString = GetInspectionDescription();
             break;
         default:
             //logToFile("This action is not possible for the door!");

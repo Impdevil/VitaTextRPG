@@ -3,12 +3,16 @@
 #include "ObjectOptions.h"
 #include <string>
 #include <unordered_map>
+
 #include <vector>
 
+struct PlayerChoice;
+class DungeonManager;
 class DungeonObject{
     protected:
     std::string id;
     std::string name;
+    DungeonManager* dungeonManager;
     uint32_t objectOptions;// bitmask for all options attached to this object
     std::string description;// base description of the object upon reaching it(rooms description followed by door ways)
     std::string inspectionString;// describes room in more detail, hinting at features and revealing more options 
@@ -23,6 +27,8 @@ class DungeonObject{
     virtual std::string GetInspectionDescription();
     void SetObjectOption(int32_t options);
     bool isOptionSet(uint32_t bitmask, ObjectOptions option);
+    void SetDungeonManager(DungeonManager* manager);
+    DungeonManager* GetDungeonManager();
 
     virtual std::vector<PlayerChoice> GenerateObjectOptions(uint32_t options);
     virtual std::vector<PlayerChoice> GetObjectOptions();
@@ -34,9 +40,9 @@ class DungeonObject{
 
 
 class DungeonFeature: public DungeonObject{
-    private:
-    bool discoverible;//means that the feature is shown upon entering the room that its held within if the room is inspected
-    bool interactive;
+    protected:
+    bool discoverible = false;//means that the feature is shown upon entering the room that its held within if the room is inspected
+    bool interactive = true;
     public:
     DungeonFeature(std::string id,std::string name, const std::string& Description,std::string inspectionString);
     bool GetDiscoverible();

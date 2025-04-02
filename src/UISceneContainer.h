@@ -22,13 +22,15 @@ class UISceneContainer{
     protected:
     int tests;
     public:
+    std::string GetName();
     UISceneContainer(std::string name);
+    ~UISceneContainer();
     void AddUIElement(std::shared_ptr<TextArea> newElement,bool elementPullsFocus);
     void RemoveUIElement(std::string name);
     TextArea* GetElement(std::string name);
     void NavigateUI(UIDIRECTION dir);
     void ElementLoseFocus();
-    void ElementGainFocus(std::string);
+    void ElementGainFocus(std::string, bool isPopUp = false);
     void Input(SceCtrlData ctrl);
     void Render();
 

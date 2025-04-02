@@ -136,7 +136,7 @@ void TextArea::Input(SceCtrlData ctrl){
     if (GetIsFocused() and !IsDisabled()){
         // logToFile("potato3.3");
         if(GetFocusable()){
-            logToFile("potato3.4");
+            //logToFile("potato3.4 TextArea");
             InputManager::getInstance()->GetKeyState(SCE_CTRL_UP);
             if(ctrl.buttons & SCE_CTRL_TRIANGLE){
                 Scroll(-1);
@@ -171,10 +171,11 @@ void TextArea::Input(SceCtrlData ctrl){
 //noninteractive add text
 /// @param newline 
 void TextArea::AddText(const std::string &newline){
+    logToFile("TextArea::AddText1");
     if (textLines.size() < textLines.capacity()){
 
         int autoScrollDistance =0;
-        //logToFile(("textarea " + name + ":newText = " + newline).c_str());
+        logToFile(("textarea " + name + ":newText = " + newline).c_str());
         if (newline.length() > maxCharOnLine){
         
             std::vector<std::string> newLines = Text_split(newline,' ');
@@ -282,6 +283,25 @@ void TextArea_SelectableItems::AddTextItem(const std::string &newline){
     }
 }
 
+void TextArea_SelectableItems::AddTextItemsGroup(std::vector<PlayerChoice> newPlayerChoices){
+    for (const auto& choice : newPlayerChoices){
+        SelectableTextItem newItem = SelectableTextItem(choice.optionString,this);
+        textItems.push_back(newItem);
+        playerChoices.push_back(choice);
+        logToFile(("AddTextItemsGroup TextArea_SelectableItems: " + choice.optionString).c_str());
+    }
+    if (textItems.size() == 0){
+        textItems[0].TakeFocus();
+    }
+}
+void TextArea_SelectableItems::ClearSelectableTextItems(){
+    textItems.clear();
+    playerChoices.clear();
+    focusedIndex = 0;
+    if (textItems.size() >0){
+        textItems[focusedIndex].TakeFocus();
+    }
+}
 
 void TextArea_SelectableItems::LoseFocus(){
     focused = false;
@@ -334,8 +354,19 @@ void TextArea_SelectableItems::Input(SceCtrlData ctrl){
     if (GetIsFocused() and !IsDisabled()){
         // logToFile("potato3.3 TextArea_SelectableItems");
         if(GetFocusable()){
-            logToFile("potato3.4 TextArea_SelectableItems");
+           // logToFile("potato3.4 TextArea_SelectableItems");
+            if (InputManager::getInstance()->GetKeyState(SCE_CTRL_CROSS)==BUTTONSTATE::JUSTPRESSED){
+                if (textItems.size() > 0){
+                    textItems[focusedIndex].Selected();
+                    textItems[focusedIndex].LoseFocus();
+                    if (playerChoices.size() > 0 and focusedIndex < playerChoices.size()){
+                        logToFile(("TextArea_SelectableItems Input TextArea_SelectableItems: " + playerChoices[focusedIndex].optionString).c_str());
+                        playerChoices[focusedIndex].UseAttachedObject();
+                        logToFile(("TextArea_SelectableItems Input TextArea_SelectableItems: " + playerChoices[focusedIndex].optionString).c_str());
 
+                    }
+                }
+            }
             if(ctrl.buttons & SCE_CTRL_TRIANGLE){
                 FocusedScroll(-1);
             }
@@ -349,7 +380,6 @@ void TextArea_SelectableItems::Input(SceCtrlData ctrl){
             if(ctrl.buttons & SCE_CTRL_SELECT){
                 AddTextItem("A mysterious shadow moved swiftly through the forest under the moonlight.");
                 AddTextItem("A wooden sign swings softly in the rain, reflecting on fire light from inside the taverns open door.");
-                
             }
             if (InputManager::getInstance()->GetKeyState(SCE_CTRL_UP)==BUTTONSTATE::JUSTPRESSED) {
                 if (focusedIndex <= 0)ownerScene->NavigateUI(NORTH);
@@ -505,6 +535,7 @@ int SelectableTextItem::GetNumberOfLines()const
 {
     return displayText.size();
 }
+
 
 
 #pragma endregion
