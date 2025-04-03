@@ -59,7 +59,7 @@ std::string DungeonObject::interactWithObject(ObjectOptions optionChoice){
             returnString = GetInspectionDescription();
             break;
         default:
-            //logToFile("This action is not possible for the door!");
+            returnString = "This action is not possible for the " + GetName() + "!";
             break;
     }
     return returnString;
@@ -77,6 +77,16 @@ DungeonFeature::DungeonFeature(std::string id, std::string name, const std::stri
 bool DungeonFeature::GetDiscoverible(){
     return discoverible;
 }
+void DungeonFeature::SetDiscoverible(bool discoverible){
+    this->discoverible = discoverible;
+}
+bool DungeonFeature::CheckFeatureDiscoverible(){
+    if (true){
+        discoverible = true;
+        return true;
 
+    }
+    return false;
+}
 
 #pragma endregion

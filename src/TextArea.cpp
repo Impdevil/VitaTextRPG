@@ -216,6 +216,7 @@ void TextArea::AddText(const std::string &newline){
         }
         else{
             textLines.push_back(newline);
+            autoScrollDistance++;
         }
         if (autoScroll){
             Scroll(autoScrollDirection*autoScrollDistance);

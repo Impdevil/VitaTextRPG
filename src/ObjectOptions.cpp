@@ -10,7 +10,7 @@ void PlayerChoice::UseAttachedObject(){
     std::string returnString;
     logToFile(("Using attached object: " + attachedObject->GetName()  + " with option " + ObjectOptionsToString(option)).c_str());
     returnString = attachedObject->interactWithObject(option);
-    attachedObject->GetDungeonManager()->GetUIContainer();
+    //attachedObject->GetDungeonManager()->GetUIContainer();
     logToFile(("Attached Objects manager: " + attachedObject->GetDungeonManager()->GetID()).c_str());
 
     if (returnString.empty()){
@@ -34,8 +34,8 @@ std::string PlayerChoice::ObjectOptionsToString(ObjectOptions option) {
             return "Unlock Door";
         case ObjectOptions::PassThrough:
             return "Pass Through";
-        case ObjectOptions::OpenChest:
-            return "Open Chest";
+        case ObjectOptions::Open:
+            return "Open ";
         case ObjectOptions::DisarmTrap:
             return "Disarm Trap";
         default:

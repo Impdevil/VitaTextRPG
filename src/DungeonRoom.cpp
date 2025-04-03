@@ -86,14 +86,31 @@ std::vector<PlayerChoice> DungeonRoom::GetObjectOptions(){
 
 std::string DungeonRoom::interactWithObject(ObjectOptions optionChoice){
     std::string returnString;
+    bool refreshUI = false;
     switch (optionChoice) {
         case ObjectOptions::Inspect:
             returnString = GetInspectionDescription();
-            logToFile(("DungeonRoom::interactWithObject GetUIContainer"+dungeonManager->GetUIContainer()->GetName()).c_str());
+            //logToFile(("DungeonRoom::interactWithObject GetUIContainer"+dungeonManager->GetUIContainerMainViewScene().get()->GetName()).c_str());
+
+            ///find all discoverable features and doors, add them to the UI
+            for(auto& pair:dungeonFeature){
+                if (!pair.second->GetDiscoverible()){
+                    if (pair.second->CheckFeatureDiscoverible()){
+                        refreshUI = true;
+
+                        pair.second->SetDiscoverible(true);
+                        returnString += " " + pair.second->GetObjectDescription();
+                        GetObjectOptions();
+                    }
+                }
+            }
             break;
         default:
             //logToFile("This action is not possible for the room!");
             break;
+    }
+    if (refreshUI){
+        dungeonManager->UpdateRoomOptions();
     }
     return returnString;
 }

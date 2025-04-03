@@ -14,7 +14,7 @@ enum class ObjectOptions : uint32_t {///bitmask
     TakeItem        = 0b00000010,  // Enter a connected room
     UnlockDoor      = 0b00000100,  // Unlock a door
     PassThrough     = 0b00001000,  // Pass through the door
-    OpenChest       = 0b00010000,  // Open a treasure chest
+    Open            = 0b00010000,  // Open a treasure chest
     DisarmTrap      = 0b00100000   // Disarm a trap
 };
 struct PlayerChoice{

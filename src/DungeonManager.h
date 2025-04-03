@@ -14,7 +14,6 @@ class DungeonManager{
     private:
     std::unordered_map<std::string, DungeonObject*> dungeonElements;
     std::string PlayerCurrentRoomID;
-    std::shared_ptr<UISceneContainer> uiContainer;
     std::string id;
     public:
     DungeonManager(std::string id);
@@ -33,10 +32,13 @@ class DungeonManager{
     std::vector<PlayerChoice> GetRoomAvalibleOptions();
 
     void AttachNewUI(std::shared_ptr<UISceneContainer>container);
-    std::shared_ptr<UISceneContainer> GetUIContainer();
+    std::shared_ptr<UISceneContainer> GetUIContainerMainViewScene();
+    TextArea* GetUIContainerMainViewSceneMainTextBox();
+    TextArea_SelectableItems* GetUIContainerMainViewScenePlayerChoiceBox();
     void UpdateRoomUI();
-    void SendDataToUI(const std::string& data);
+    void UpdateRoomOptions();
 
+    void SendDataToUI(const std::string& data);
 };
 
 

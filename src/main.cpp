@@ -72,7 +72,7 @@ void makeBasicDungeon(){
 	DungeonRoom* newRoom = new DungeonRoom(std::string("e1"),std::string("Entrance Room"),std::string("A bright and airy room lit by candles."),std::string("the candles look like they have been burning for a little while."));
 	DungeonDoor* newDoor = new DungeonDoor("e1d1","wooden Door", "A wooden door hangs from its hinges.", "It looks like its about to fall from the hinges, and the slight smell of mildew");
 
-	basicDungeon.AddDungeonRoom(newRoom);
+	basicDungeon.AddStartingRoom(newRoom);
 	newRoom->GenerateObjectOptions(static_cast<uint32_t>(ObjectOptions::Inspect));
 	newDoor->SetObjectOption(static_cast<uint32_t>(ObjectOptions::PassThrough) | static_cast<uint32_t>(ObjectOptions::Inspect));
 	newRoom->AddDungeonDoor(newDoor);
@@ -80,7 +80,7 @@ void makeBasicDungeon(){
 	DungeonRoom* newRoom1 = new DungeonRoom("e2","Bed Room","A bed sits in the corner of the room",std::string("The bed isnt made, some of the covers lay on the floor, either someone was in a rush or they're lazy."));
 
 	basicDungeon.AddDungeonFeature(newDoor);
-	basicDungeon.AddStartingRoom(newRoom1);
+	basicDungeon.AddDungeonRoom(newRoom1);
 	newRoom1->AddDungeonDoor(newDoor);
 
 
@@ -92,7 +92,13 @@ void makeBasicDungeon(){
 	newRoom->SetDungeonManager(&basicDungeon);
 	newRoom1->SetDungeonManager(&basicDungeon);
 	newDoor->SetDungeonManager(&basicDungeon);	
-	basicDungeon.AttachNewUI(UIManager::GetInstance().GetSceneContainer("MainViewScene"));
+	DungeonFeature* room2Feature = new DungeonFeature("e2f1","Bed covers","The bed covers seem like they are moving.",std::string("A goblin hides under the bed covers!"));
+	room2Feature->SetDungeonManager(&basicDungeon);
+	basicDungeon.AddDungeonFeature(room2Feature);
+	newRoom1->AddDungeonFeature(room2Feature);
+	room2Feature->SetDiscoverible(false);
+	room2Feature->SetObjectOption(static_cast<uint32_t>(ObjectOptions::Inspect) | static_cast<uint32_t>(ObjectOptions::Open));
+	//basicDungeon.AttachNewUI(UIManager::GetInstance().GetSceneContainer("MainViewScene"));
 
 }
 

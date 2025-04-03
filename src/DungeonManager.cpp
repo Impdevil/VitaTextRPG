@@ -1,11 +1,24 @@
 #include "DungeonManager.h"
 
 
-DungeonManager::DungeonManager(std::string id ):id(id),uiContainer(nullptr),PlayerCurrentRoomID(""){
+DungeonManager::DungeonManager(std::string id ):id(id),PlayerCurrentRoomID(""){
 
 }
 std::string DungeonManager::GetID(){    return id;     }
 
+std::shared_ptr<UISceneContainer>  DungeonManager::GetUIContainerMainViewScene(){
+    logToFile("GetUIContainer: uiContainer is being accessed.");
+    return UIManager::GetInstance().GetSceneContainer("MainViewScene");
+};
+TextArea*  DungeonManager::GetUIContainerMainViewSceneMainTextBox(){
+    logToFile("GetUIContainer: uiContainer is being accessed.");
+    return UIManager::GetInstance().GetSceneContainer("MainViewScene")->GetElement("MainTextBox");
+};
+TextArea_SelectableItems*  DungeonManager::GetUIContainerMainViewScenePlayerChoiceBox(){
+    logToFile("GetUIContainer: uiContainer is being accessed.");
+    return dynamic_cast<TextArea_SelectableItems*>(UIManager::GetInstance().GetSceneContainer("MainViewScene")->GetElement("PlayerChoiceBox"));
+
+};
 
 void DungeonManager::AddDungeonRoom(DungeonRoom* newdungeonRoom){
     dungeonElements.emplace(newdungeonRoom->GetID(),newdungeonRoom);
@@ -31,12 +44,12 @@ void DungeonManager::MoveToRoom(std::string roomID){
 }
 
 void DungeonManager::TraverseRoom(std::string doorID){
-    dynamic_cast<TextArea_SelectableItems*>(uiContainer->GetElement("PlayerChoiceBox"))->ClearSelectableTextItems();
+    GetUIContainerMainViewScenePlayerChoiceBox()->ClearSelectableTextItems();
 
     std::string newRoomId = dynamic_cast<DungeonDoor*>(dungeonElements.at(doorID))->GetOtherRoom(dynamic_cast<DungeonRoom*>(dungeonElements.at(PlayerCurrentRoomID)))->GetID();
     PlayerCurrentRoomID = newRoomId;
     logToFile(("Traversing to new room: " + PlayerCurrentRoomID).c_str());
-    if (uiContainer) {
+    if (GetUIContainerMainViewScene()) {
         logToFile("Traversing UI container is valid.");
         UpdateRoomUI();
     } else {
@@ -64,66 +77,57 @@ std::vector<PlayerChoice> DungeonManager::GetRoomAvalibleOptions(){
 
 
 
-void DungeonManager::AttachNewUI(std::shared_ptr<UISceneContainer> container){
-    uiContainer = container;
-    if (uiContainer) {
-        logToFile(("Attached UI Container: " + uiContainer->GetName()).c_str());
-    } else {
-        logToFile("Failed to attach UI Container: uiContainer is null.");
-    }
-}
-std::shared_ptr<UISceneContainer>  DungeonManager::GetUIContainer(){
-    logToFile("GetUIContainer: uiContainer is being accessed.");
-    UIManager::GetInstance().GetSceneContainer("MainViewScene");
-    if (uiContainer == nullptr) {
-        logToFile("Error: uiContainer is null.");
-        return nullptr;
-    }
-    else {
-        logToFile("GetUIContainer: uiContainer is not null.");
-    }
-    logToFile("GetUIContainer: uiContainer is valid.");
-    return uiContainer;
-};
+// void DungeonManager::AttachNewUI(std::shared_ptr<UISceneContainer> container){
+//     uiContainer = container;
+//     if (uiContainer) {
+//         logToFile(("Attached UI Container: " + uiContainer->GetName()).c_str());
+//     } else {
+//         logToFile("Failed to attach UI Container: uiContainer is null.");
+//     }
+// }
+
+
 
 
 void DungeonManager::UpdateRoomUI(){
-    dynamic_cast<TextArea_SelectableItems*>(uiContainer->GetElement("PlayerChoiceBox"))->ClearSelectableTextItems();
+    GetUIContainerMainViewScenePlayerChoiceBox()->ClearSelectableTextItems();
     std::string roomDescription = GetRoomDescription();
     logToFile(("Updating UI, current room is: " + PlayerCurrentRoomID).c_str());
-    logToFile(("UIContainer is " + uiContainer->GetName()).c_str());
+    logToFile(("UIContainer is " + GetUIContainerMainViewSceneMainTextBox()->GetName()).c_str());
     logToFile(roomDescription.c_str());
 
 
-    uiContainer->GetElement("MainTextBox")->AddText(roomDescription);
-    dynamic_cast<TextArea_SelectableItems*>(uiContainer->GetElement("PlayerChoiceBox"))->AddTextItemsGroup(GetRoomAvalibleOptions());
+    GetUIContainerMainViewSceneMainTextBox()->AddText(roomDescription);
+    GetUIContainerMainViewScenePlayerChoiceBox()->AddTextItemsGroup(GetRoomAvalibleOptions());
+}
+void DungeonManager::UpdateRoomOptions(){
+    GetUIContainerMainViewScenePlayerChoiceBox()->ClearSelectableTextItems();
+    logToFile(("Updating UI, current room is: " + PlayerCurrentRoomID).c_str());
+    logToFile(("UIContainer is " + GetUIContainerMainViewSceneMainTextBox()->GetName()).c_str());
+
+    GetUIContainerMainViewScenePlayerChoiceBox()->AddTextItemsGroup(GetRoomAvalibleOptions());
 }
 void DungeonManager::SendDataToUI(const std::string& data) {
     try{
-    logToFile(("Sending data to UI: " + data).c_str());
-    logToFile("potatoDMSDTUI1");
-    GetUIContainer();
-    logToFile("potatoDMSDTUI2");
-    if (!GetUIContainer()) {
-        logToFile("Error: SendDataToUI UI container is null.");
-        return;
-    }
-    logToFile("potatoDMSDTUI3");
-
-    if (uiContainer) {
-        logToFile("UI container is valid.");
-        TextArea* mainTextBox = uiContainer.get()->GetElement("MainTextBox");
-        uiContainer->ElementGainFocus("MainTextBox");
+        logToFile(("Sending data to UI: " + data).c_str());
+        logToFile("potatoDMSDTUI1");
+        GetUIContainerMainViewSceneMainTextBox();
+        logToFile("potatoDMSDTUI2");
+        if (!GetUIContainerMainViewSceneMainTextBox()) {
+            logToFile("Error: SendDataToUI UI container is null.");
+            return;
+        }
+        logToFile("potatoDMSDTUI3");
+        auto* mainTextBox = GetUIContainerMainViewSceneMainTextBox();
         if (mainTextBox) {
             logToFile("MainTextBox found in UI container.");
             mainTextBox->AddText(data);
+
         } else {
-            logToFile("Error: MainTextBox not found in UI container.");
+                logToFile("Error: MainTextBox not found in UI container.");
         }
-    } else {
-        logToFile("Error: UI container is null.");
+
     }
-}
     catch (const std::exception& e) {
         logToFile(("Exception: " + std::string(e.what())).c_str());
     }

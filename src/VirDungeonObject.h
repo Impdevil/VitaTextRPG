@@ -46,6 +46,9 @@ class DungeonFeature: public DungeonObject{
     public:
     DungeonFeature(std::string id,std::string name, const std::string& Description,std::string inspectionString);
     bool GetDiscoverible();
+    void SetDiscoverible(bool discoverible);
+
+    bool CheckFeatureDiscoverible();
 
 };
 #endif
