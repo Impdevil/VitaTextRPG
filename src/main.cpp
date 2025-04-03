@@ -92,9 +92,7 @@ void makeBasicDungeon(){
 	newRoom->SetDungeonManager(&basicDungeon);
 	newRoom1->SetDungeonManager(&basicDungeon);
 	newDoor->SetDungeonManager(&basicDungeon);	
-	basicDungeon.AttachNewUI(UIManager::GetInstance().GetSceneContainer("MainViewScene"));{
-		logToFile("MainViewScene is being deleted");
-	}));
+	basicDungeon.AttachNewUI(UIManager::GetInstance().GetSceneContainer("MainViewScene"));
 
 }
 

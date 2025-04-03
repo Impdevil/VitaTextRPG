@@ -7,6 +7,7 @@
 #include "DungeonRoom.h"
 #include "UISceneContainer.h"
 #include "DebugLogging.h"
+#include "UIManager.h"
 #include <memory>
 #include <cassert>
 class DungeonManager{

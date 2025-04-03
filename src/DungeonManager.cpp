@@ -74,6 +74,7 @@ void DungeonManager::AttachNewUI(std::shared_ptr<UISceneContainer> container){
 }
 std::shared_ptr<UISceneContainer>  DungeonManager::GetUIContainer(){
     logToFile("GetUIContainer: uiContainer is being accessed.");
+    UIManager::GetInstance().GetSceneContainer("MainViewScene");
     if (uiContainer == nullptr) {
         logToFile("Error: uiContainer is null.");
         return nullptr;
