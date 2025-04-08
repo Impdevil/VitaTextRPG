@@ -3,10 +3,20 @@
 
 
 #include <psp2/sqlite.h>
-
 #include <string>
 #include <vector>
 #include <unordered_map>
+ #include <psp2/apputil.h>
+ #include <psp2/sysmodule.h>
+
+#include "sqlite3.h"
+
+
+extern "C" {
+    int sqlite3_rw_init(void);
+    int sqlite3_rw_exit(void);
+}
+
 
 
 class DatabaseConnecter {

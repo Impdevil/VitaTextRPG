@@ -38,31 +38,36 @@ set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
 
 # Add any additional include paths here
 include_directories(
+${VITASDK}/arm-vita-eabi/include
 )
 
 # Add any additional library paths here
 # ${CMAKE_CURRENT_BINARY_DIR} lets you use any library currently being built
 link_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
+  ${VITASDK}/arm-vita-eabi/lib
 )
 
 ## Build and link
 # Add all the files needed to compile here
 add_executable(${PROJECT_NAME}
-  src/main.cpp
-  src/TextArea.cpp
-  src/DebugLogging.cpp
-  src/UISceneContainer.cpp
-  src/InputManager.cpp
-  src/DungeonManager.cpp
-  src/DungeonRoom.cpp
-  src/VirDungeonObject.cpp
-  src/ObjectOptions.cpp
-  src/UIManager.cpp
+	src/main.cpp
+	src/TextArea.cpp
+	src/DebugLogging.cpp
+	src/UISceneContainer.cpp
+	src/InputManager.cpp
+	src/DungeonManager.cpp
+	src/DungeonRoom.cpp
+	src/VirDungeonObject.cpp
+	src/ObjectOptions.cpp
+	src/UIManager.cpp
+	src/DatabaseConnecter.cpp
 )
 
 # Library to link to (drop the -l prefix). This will mostly be stubs.
 target_link_libraries(${PROJECT_NAME}
+	sqlite
+	SceSqlite_stub
 	vita2d
 	png
 	jpeg
@@ -75,6 +80,7 @@ target_link_libraries(${PROJECT_NAME}
 	SceGxm_stub
 	SceCommonDialog_stub
 	SceAppMgr_stub
+	SceSysmodule_stub
 )
 
 ## Create Vita files

@@ -28,8 +28,15 @@ class DungeonManager{
     void AddStartingRoom(DungeonRoom* newdungeonRoom);
     void RemoveDungeonRoom(std::string id);
 
+    DungeonRoom* GetDungeonRoom( std::string roomID);
+    DungeonDoor* GetDungeonDoor( std::string doorID);
+    DungeonFeature* GetDungeonFeature(  std::string featureID);
+    DungeonObject* GetDungeonObject(std::string objectID);
+
+
     void AddDungeonFeature(DungeonFeature* newFeature);
-    void LoadDungeonFromDatabase(std::string databasePath, std::string dungeonID);
+    
+    bool LoadDungeonFromDatabase(std::string databasePath, std::string dungeonID);
     void MoveToRoom(std::string roomID);
     void TraverseRoom(std::string doorID);
 

@@ -24,6 +24,8 @@ class DungeonObject{
     virtual ~DungeonObject();
 
     DungeonFeature* GetDungeonFeature(std::string);
+    void AddDungeonFeature(DungeonFeature* newFeature);
+    
     std::string GetID();
     std::string GetName();
     virtual std::string GetObjectDescription();
