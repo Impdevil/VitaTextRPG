@@ -8,6 +8,7 @@
 
 struct PlayerChoice;
 class DungeonManager;
+class DungeonFeature;
 class DungeonObject{
     protected:
     std::string id;
@@ -17,10 +18,12 @@ class DungeonObject{
     std::string description;// base description of the object upon reaching it(rooms description followed by door ways)
     std::string inspectionString;// describes room in more detail, hinting at features and revealing more options 
     std::vector<PlayerChoice> playerChoices;
+    std::unordered_map<std::string,DungeonFeature*> dungeonFeature;
     public:
     DungeonObject(std::string id, std::string name, std::string Description, std::string inspectionString);
     virtual ~DungeonObject();
 
+    DungeonFeature* GetDungeonFeature(std::string);
     std::string GetID();
     std::string GetName();
     virtual std::string GetObjectDescription();

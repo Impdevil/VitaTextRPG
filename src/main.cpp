@@ -22,7 +22,6 @@
 #include "InputManager.h"
 #include "DungeonManager.h"
 #include "DungeonRoom.h"
-using namespace std;
 
 
 UISceneContainer MainViewScene= UISceneContainer("MainViewScene");

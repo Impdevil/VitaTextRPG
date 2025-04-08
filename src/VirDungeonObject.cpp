@@ -20,6 +20,13 @@ DungeonObject::~DungeonObject() {
     // Destructor implementation
     
 }
+DungeonFeature* DungeonObject::GetDungeonFeature(std::string id){
+    return dungeonFeature.at(id);
+}
+
+void DungeonObject::AddDungeonFeature(DungeonFeature* newFeature){
+    dungeonFeature.emplace(newFeature->GetID(),newFeature);
+}
 
 std::vector<PlayerChoice> DungeonObject::GenerateObjectOptions(uint32_t options){
     std::vector<PlayerChoice> newPlayerChoices;

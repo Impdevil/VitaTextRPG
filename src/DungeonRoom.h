@@ -12,10 +12,9 @@
 class DungeonDoor;
 
 class DungeonRoom:public DungeonObject{
-
+ 
     protected:
     std::unordered_map <std::string,DungeonDoor*> doorways;
-    std::unordered_map<std::string,DungeonFeature*> dungeonFeature;
     public:
     DungeonRoom(std::string doorID,std::string name, const std::string& Description,std::string inspectionString);
 

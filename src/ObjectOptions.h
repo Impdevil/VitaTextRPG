@@ -15,7 +15,8 @@ enum class ObjectOptions : uint32_t {///bitmask
     UnlockDoor      = 0b00000100,  // Unlock a door
     PassThrough     = 0b00001000,  // Pass through the door
     Open            = 0b00010000,  // Open a treasure chest
-    DisarmTrap      = 0b00100000   // Disarm a trap
+    DisarmTrap      = 0b00100000,  // Disarm a trap
+    SpecialAction   = 0b01000000,  // Perform a special action used when object has a function held within json. 
 };
 struct PlayerChoice{
     ObjectOptions option;

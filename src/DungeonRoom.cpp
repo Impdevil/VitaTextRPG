@@ -28,13 +28,8 @@ DungeonDoor* DungeonRoom::GetDungeonDoor(std::string id){
 void DungeonRoom::AddDungeonDoor(DungeonDoor* newdoorway){
     doorways.emplace(newdoorway->GetID(),newdoorway);
 }
-DungeonFeature* DungeonRoom::GetDungeonFeature(std::string id){
-    return dungeonFeature.at(id);
-}
-void DungeonRoom::AddDungeonFeature(DungeonFeature* newFeature){
-    dungeonFeature.emplace(newFeature->GetID(),newFeature);
-}
 
+ 
 std::string DungeonRoom::GetRoomEntryDescription(){
     std::string roomEntryDescription="";
     ///string setup Room description, discoverable features, doors. 
