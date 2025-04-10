@@ -160,3 +160,15 @@ build/CMakeFiles/TextAdventure.vpk.dir/cmake_clean.cmake
 build/CMakeFiles/TextAdventure.vpk.dir/DependInfo.cmake
 build/CMakeFiles/TextAdventure.vpk.dir/progress.make
 CMakeFiles/TextAdventure.dir/src/DatabaseConnecter.cpp.obj
+CMakeFiles/TextAdventure.dir/src/CharacterSystems/Character.cpp.obj
+CMakeFiles/TextAdventure.dir/src/DungeonElements/DungeonManager.cpp.obj
+CMakeFiles/TextAdventure.dir/src/DungeonElements/DungeonRoom.cpp.obj
+CMakeFiles/TextAdventure.dir/src/DungeonElements/ObjectOptions.cpp.obj
+CMakeFiles/TextAdventure.dir/src/DungeonElements/VirDungeonObject.cpp.obj
+CMakeFiles/TextAdventure.dir/src/ItemSystems/PlayerItem.cpp.obj
+CMakeFiles/TextAdventure.dir/src/Systems/DatabaseConnecter.cpp.obj
+CMakeFiles/TextAdventure.dir/src/Systems/DebugLogging.cpp.obj
+CMakeFiles/TextAdventure.dir/src/UISystems/InputManager.cpp.obj
+CMakeFiles/TextAdventure.dir/src/UISystems/TextArea.cpp.obj
+CMakeFiles/TextAdventure.dir/src/UISystems/UIManager.cpp.obj
+CMakeFiles/TextAdventure.dir/src/UISystems/UISceneContainer.cpp.obj
