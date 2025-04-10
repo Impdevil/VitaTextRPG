@@ -60,14 +60,14 @@ std::vector<std::unordered_map<std::string, std::string>> DatabaseConnecter::Fet
         logToFile(("Failed to prepare statement: " + std::string(sqlite3_errmsg(db))).c_str());
         return results;
     }
-    logToFile("Statement prepared successfully.");
+    //logToFile("Statement prepared successfully.");
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        logToFile("Row fetched successfully.");
+        //logToFile("Row fetched successfully.");
         std::unordered_map<std::string, std::string> row;
         int columnCount = sqlite3_column_count(stmt);
-        logToFile(("Column count: " + std::to_string(columnCount)).c_str());
+        //logToFile(("Column count: " + std::to_string(columnCount)).c_str());
         for (int i = 0; i < columnCount; ++i) {
-            logToFile(("Column index: " + std::to_string(i)).c_str());
+            //logToFile(("Column index: " + std::to_string(i)).c_str());
             logToFile(("Column name: " + std::string(sqlite3_column_name(stmt, i))).c_str());
             const char* columnName = sqlite3_column_name(stmt, i);
             const char* columnValue = reinterpret_cast<const char*>(sqlite3_column_text(stmt, i));
@@ -75,23 +75,23 @@ std::vector<std::unordered_map<std::string, std::string>> DatabaseConnecter::Fet
             switch (sqlite3_column_type(stmt, i)) {
             case SQLITE_INTEGER:
                 row[sqlite3_column_name(stmt, i)] = std::to_string(sqlite3_column_int(stmt, i));
-                logToFile(("Column int value : " + std::to_string(sqlite3_column_int(stmt, i))).c_str());
+                //logToFile(("Column int value : " + std::to_string(sqlite3_column_int(stmt, i))).c_str());
                 break;
             case SQLITE_FLOAT:
                 row[sqlite3_column_name(stmt, i)] = std::to_string(sqlite3_column_double(stmt, i));
-                logToFile(("Column float value: " + std::to_string(sqlite3_column_double(stmt, i))).c_str());
+                //logToFile(("Column float value: " + std::to_string(sqlite3_column_double(stmt, i))).c_str());
                 break;
             case SQLITE_TEXT:
                 row[sqlite3_column_name(stmt, i)] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, i));
-                logToFile(("Column text value: " + std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, i)))).c_str());
+                //logToFile(("Column text value: " + std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, i)))).c_str());
                 break;
             case SQLITE_BLOB:
                 row[sqlite3_column_name(stmt, i)] = "BLOB data"; // Handle BLOB data as needed
-                logToFile("Column blob value: blob unimplemented");
+                //logToFile("Column blob value: blob unimplemented");
                 break;
             case SQLITE_NULL:
                 row[sqlite3_column_name(stmt, i)] = "NULL";
-                logToFile("Column value: NULL");
+                //logToFile("Column value: NULL");
                 break;      
 
             
@@ -100,8 +100,6 @@ std::vector<std::unordered_map<std::string, std::string>> DatabaseConnecter::Fet
                 logToFile("Unknown column type.");
                 break;
             }
-
-
         }
         results.push_back(row);
     }

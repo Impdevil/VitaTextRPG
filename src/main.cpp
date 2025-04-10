@@ -7,7 +7,7 @@
 
 
 #include <memory>
-#include "DebugLogging.h"
+#include "Systems/DebugLogging.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -16,12 +16,12 @@
 #include <string>
 
 #include <vita2d.h>
-#include "TextArea.h"
-#include "UISceneContainer.h"
-#include "UIManager.h"
-#include "InputManager.h"
-#include "DungeonManager.h"
-#include "DungeonRoom.h"
+#include "UISystems/TextArea.h"
+#include "UISystems/UISceneContainer.h"
+#include "UISystems/UIManager.h"
+#include "UISystems/InputManager.h"
+#include "DungeonElements/DungeonManager.h"
+#include "DungeonElements/DungeonRoom.h"
 
 
 UISceneContainer MainViewScene= UISceneContainer("MainViewScene");
@@ -110,7 +110,7 @@ void makeDBDungeon(){
 	else{
 		logToFile("Dungeon loaded from database successfully.");
 	}
-	basicDungeon.UpdateRoomUI();
+	//basicDungeon.UpdateRoomUI();
 }
 
 int main(){

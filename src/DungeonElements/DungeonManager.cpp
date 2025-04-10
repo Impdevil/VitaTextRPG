@@ -27,13 +27,13 @@ bool DungeonManager::LoadDungeonFromDatabase(std::string databasePath, std::stri
     std::string query = "SELECT * FROM Dungeon WHERE dungeonName = '" + dungeonName + "';";
     logToFile(("Querying database for dungeon name." + dungeonName).c_str());
     auto results = db.FetchQueryResults(query);
-    logToFile("Fetching results from database.");
+    //logToFile("Fetching results from database.");
     if (results.empty()) {
         logToFile("No results found for the given dungeon name.");
         return false;
     }
     std::string dungeonID = results[0].at("dungeonDBID");
-    logToFile(("Dungeon ID: " + dungeonID).c_str());
+    //logToFile(("Dungeon ID: " + dungeonID).c_str());
 
     query = "SELECT * FROM DungeonRooms WHERE dungeonDBID = '" + dungeonID + "';";
     results = db.FetchQueryResults(query);
@@ -69,52 +69,64 @@ bool DungeonManager::LoadDungeonFromDatabase(std::string databasePath, std::stri
         logToFile("No  door results found for the given dungeon ID.");
         return false;
     }   
-    logToFile("Door results found for the given dungeon ID.");
+    //logToFile("Door results found for the given dungeon ID.");
     for (const auto& row : results) {
-        logToFile(("New door to add: " + row.at("doorID")).c_str());
-        std::string doorID = ("d"+row.at("doorID")).c_str();
+        //logToFile(("New door to add: " + row.at("doorIDDB")).c_str());
+        std::string doorID = ("d"+row.at("doorIDDB")).c_str();
         std::string doorName = row.at("doorName");
-        logToFile(("doorname: " + doorName).c_str());
 
         std::string doorDescription = row.at("descriptionText");
         std::string doorinspectionString = row.at("inspectionText");
-        logToFile(("Adding door: " + doorID).c_str());
+
+        bool discoverible = row.at("hidden") == "0" ? true : false;
 
         DungeonRoom* connectA = GetDungeonRoom(("r"+row.at("dungeonRoomDBID_from")).c_str());
+
         DungeonRoom* connectB = GetDungeonRoom(("r"+row.at("dungeonRoomDBID_to")).c_str());
-        logToFile(("Adding door: " + doorID).c_str());
 
         DungeonDoor* newDoor = new DungeonDoor(doorID,doorName ,doorDescription, doorinspectionString);
-        newDoor->SetObjectOption(static_cast<uint32_t>(ObjectOptions::PassThrough) | static_cast<uint32_t>(ObjectOptions::Inspect));
+
         newDoor->SetDungeonManager(this);
-        logToFile(("Adding door: " + doorID).c_str());
+        newDoor->SetDiscoverible(discoverible);
+        newDoor->GenerateObjectOptions(static_cast<uint32_t>(ObjectOptions::PassThrough) | static_cast<uint32_t>(ObjectOptions::Inspect));
 
         newDoor->SetRoomConnection(connectA, connectB); 
         connectA->AddDungeonDoor(newDoor);
         connectB->AddDungeonDoor(newDoor);
         AddDungeonFeature(newDoor);
-        logToFile(("Adding door: " + doorID).c_str());
+        //logToFile(("Adding door: " + doorID).c_str());
 
     }
-    query = "SELECT * FROM Features WHERE dungeonDBID = '" + dungeonID + "';";
+    //logToFile("Door results added to dungeon.");
+    query = "SELECT * FROM Feature WHERE dungeonDBID = '" + dungeonID + "';";
     results = db.FetchQueryResults(query);
     if (results.empty()) {
         logToFile("No feature results found for the given dungeon ID. dungeon may have no features");
         return true;
     }
+    // else{
+    //     logToFile("Feature results found for the given dungeon ID.");
+    // }
     for (const auto& row : results) {
-        std::string featureID = ("f" + row.at("FeatureID")).c_str();
-        std::string featureName = row.at("FeatureName");
+        std::string featureID = ("f" + row.at("featureIDDB")).c_str();
+        std::string featureName = row.at("featureName");
         std::string featureDescription = row.at("descriptionText");
-        std::string inspectionString = row.at("inspectionText");
-        bool discoverible = row.at("hidden ") == "1" ? true : false;
-        std::string parentObject= row.at("ParentObjectID");
+        //logToFile(("New feature to add: " + featureID).c_str());
 
+        std::string inspectionString = row.at("inspectionText");
+        bool discoverible = row.at("hidden") == "0" ? true : false;
+        std::string parentObject= row.at("featureParentID");
+        //logToFile(("New feature to add: " + featureID).c_str());
         DungeonFeature* newFeature = new DungeonFeature(featureID, featureName, featureDescription, inspectionString);
         newFeature->SetDungeonManager(this);
         newFeature->SetDiscoverible(false);
-        newFeature->SetObjectOption(static_cast<uint32_t>(ObjectOptions::Inspect) | static_cast<uint32_t>(ObjectOptions::Open));
+        newFeature->GenerateObjectOptions(static_cast<uint32_t>(ObjectOptions::Inspect) | static_cast<uint32_t>(ObjectOptions::Open));
+        //logToFile(("New feature to add: " + featureID).c_str());
+
+       
         GetDungeonObject(parentObject)->AddDungeonFeature(newFeature);
+        //logToFile(("New feature to add: " + featureID).c_str());
+
         AddDungeonFeature(newFeature);
     }
     return true;

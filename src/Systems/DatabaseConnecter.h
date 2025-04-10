@@ -9,7 +9,7 @@
  #include <psp2/apputil.h>
  #include <psp2/sysmodule.h>
 
-#include "sqlite3.h"
+#include "../sqlite3.h"
 
 
 extern "C" {

@@ -5,12 +5,12 @@
 #include <unordered_map>
 #include "VirDungeonObject.h"
 #include "DungeonRoom.h"
-#include "UISceneContainer.h"
-#include "DebugLogging.h"
-#include "UIManager.h"
+#include "../UISystems/UISceneContainer.h"
+#include "../Systems/DebugLogging.h"
+#include "../UISystems/UIManager.h"
 #include <memory>
 #include <cassert>
-#include "DatabaseConnecter.h"
+#include "../Systems/DatabaseConnecter.h"
 
 
 

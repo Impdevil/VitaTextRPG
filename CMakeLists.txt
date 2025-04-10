@@ -52,16 +52,18 @@ link_directories(
 # Add all the files needed to compile here
 add_executable(${PROJECT_NAME}
 	src/main.cpp
-	src/TextArea.cpp
-	src/DebugLogging.cpp
-	src/UISceneContainer.cpp
-	src/InputManager.cpp
-	src/DungeonManager.cpp
-	src/DungeonRoom.cpp
-	src/VirDungeonObject.cpp
-	src/ObjectOptions.cpp
-	src/UIManager.cpp
-	src/DatabaseConnecter.cpp
+	src/UISystems/TextArea.cpp
+	src/Systems/DebugLogging.cpp
+	src/UISystems/UISceneContainer.cpp
+	src/UISystems/InputManager.cpp
+	src/DungeonElements/DungeonManager.cpp
+	src/DungeonElements/DungeonRoom.cpp
+	src/DungeonElements/VirDungeonObject.cpp
+	src/DungeonElements/ObjectOptions.cpp
+	src/UISystems/UIManager.cpp
+	src/Systems/DatabaseConnecter.cpp
+	src/ItemSystems/PlayerItem.cpp
+	src/CharacterSystems/Character.cpp
 )
 
 # Library to link to (drop the -l prefix). This will mostly be stubs.
