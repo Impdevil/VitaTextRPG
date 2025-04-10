@@ -62,8 +62,8 @@ add_executable(${PROJECT_NAME}
 	src/DungeonElements/ObjectOptions.cpp
 	src/UISystems/UIManager.cpp
 	src/Systems/DatabaseConnecter.cpp
-	src/ItemSystems/PlayerItem.cpp
-	src/CharacterSystems/Character.cpp
+	#src/ItemSystems/PlayerItem.cpp
+	#src/CharacterSystems/Character.cpp
 )
 
 # Library to link to (drop the -l prefix). This will mostly be stubs.
