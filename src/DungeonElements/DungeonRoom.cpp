@@ -28,13 +28,8 @@ DungeonDoor* DungeonRoom::GetDungeonDoor(std::string id){
 void DungeonRoom::AddDungeonDoor(DungeonDoor* newdoorway){
     doorways.emplace(newdoorway->GetID(),newdoorway);
 }
-DungeonFeature* DungeonRoom::GetDungeonFeature(std::string id){
-    return dungeonFeature.at(id);
-}
-void DungeonRoom::AddDungeonFeature(DungeonFeature* newFeature){
-    dungeonFeature.emplace(newFeature->GetID(),newFeature);
-}
 
+ 
 std::string DungeonRoom::GetRoomEntryDescription(){
     std::string roomEntryDescription="";
     ///string setup Room description, discoverable features, doors. 
@@ -65,15 +60,6 @@ std::vector<PlayerChoice> DungeonRoom::GenerateObjectOptions(uint32_t options) {
 
 std::vector<PlayerChoice> DungeonRoom::GetObjectOptions(){
     std::vector<PlayerChoice> newPlayerChoices =DungeonObject::GetObjectOptions();
-    
-    std::vector<PlayerChoice> dungeonFeaturesOptions;
-    for(auto& pair:dungeonFeature){
-        if (pair.second->GetDiscoverible()){
-            dungeonFeaturesOptions = pair.second->GetObjectOptions();
-            newPlayerChoices.insert(newPlayerChoices.end(), dungeonFeaturesOptions.begin(),dungeonFeaturesOptions.end());
-        }
-    }
-
     std::vector<PlayerChoice> dungeonDoorwaysOptions;
     for(auto& pair:doorways){
         if (pair.second->GetDiscoverible()){
@@ -85,33 +71,13 @@ std::vector<PlayerChoice> DungeonRoom::GetObjectOptions(){
 }
 
 std::string DungeonRoom::interactWithObject(ObjectOptions optionChoice){
-    std::string returnString;
-    bool refreshUI = false;
+    std::string returnString = DungeonObject::interactWithObject(optionChoice);
     switch (optionChoice) {
-        case ObjectOptions::Inspect:
-            returnString = GetInspectionDescription();
-            //logToFile(("DungeonRoom::interactWithObject GetUIContainer"+dungeonManager->GetUIContainerMainViewScene().get()->GetName()).c_str());
-
-            ///find all discoverable features and doors, add them to the UI
-            for(auto& pair:dungeonFeature){
-                if (!pair.second->GetDiscoverible()){
-                    if (pair.second->CheckFeatureDiscoverible()){
-                        refreshUI = true;
-
-                        pair.second->SetDiscoverible(true);
-                        returnString += " " + pair.second->GetObjectDescription();
-                        GetObjectOptions();
-                    }
-                }
-            }
-            break;
         default:
             //logToFile("This action is not possible for the room!");
             break;
     }
-    if (refreshUI){
-        dungeonManager->UpdateRoomOptions();
-    }
+
     return returnString;
 }
 #pragma endregion
@@ -170,6 +136,7 @@ void DungeonDoor::SetDoorState(DoorState state){
     lockState = state;
 }
 std::string DungeonDoor::interactWithObject(ObjectOptions optionChoice){
+
     std::string returnString;
     switch (optionChoice) {
         case ObjectOptions::Inspect:

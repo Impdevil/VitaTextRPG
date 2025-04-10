@@ -2,7 +2,7 @@
 #define OBJECTOPTIONS_H
 
 #include <string>
-#include "DebugLogging.h"
+#include "../Systems/DebugLogging.h"
 //#include "VirDungeonObject.h"
 
 class DungeonObject;

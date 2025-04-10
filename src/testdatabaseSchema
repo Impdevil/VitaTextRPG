@@ -1,0 +1,28 @@
+--
+-- File generated with SQLiteStudio v3.4.17 on Tue Apr 8 23:32:48 2025
+--
+-- Text encoding used: System
+--
+PRAGMA foreign_keys = off;
+BEGIN TRANSACTION;
+
+-- Table: DoorTable
+CREATE TABLE IF NOT EXISTS DoorTable (doorIDDB INTEGER PRIMARY KEY AUTOINCREMENT, doorName TEXT (3, 64), dungeonIDDB INTEGER REFERENCES Dungeon (DungeonDBID), DoorType INTEGER REFERENCES DoorTypes (DoorTypeID), hidden, dungeonRoomDBID_from INTEGER REFERENCES DungeonRooms (RoomIDDB), dungeonRoomDBID_to INTEGER REFERENCES DungeonRooms (RoomIDDB), descriptionText BLOB (32, 1024), inspectionText BLOB (32, 256), locked INTEGER, customData BLOB (32, 1024));
+
+-- Table: DoorTypes
+CREATE TABLE IF NOT EXISTS DoorTypes (DoorTypeID INTEGER PRIMARY KEY AUTOINCREMENT, DoorType TEXT);
+
+-- Table: Dungeon
+CREATE TABLE IF NOT EXISTS Dungeon (dungeonDBID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, dungeonName TEXT (10, 64));
+
+-- Table: DungeonRooms
+CREATE TABLE IF NOT EXISTS DungeonRooms (roomIDDB INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, dungeonDBID TEXT (3, 32) REFERENCES Dungeon (DungeonDBID), roomName TEXT (3, 64), descriptionText BLOB (10, 1024), inspectionText BLOB (10, 1024), customData BLOB (32, 1024), entranceRoom INTEGER (1, 1));
+
+-- Table: Feature
+CREATE TABLE IF NOT EXISTS Feature (featureIDDB INTEGER PRIMARY KEY AUTOINCREMENT, roomIDDB INTEGER REFERENCES DungeonRooms (RoomIDDB), featureName TEXT (3, 64), featuretype INTEGER REFERENCES FeatureTypes (featureTypeID), featureParentID TEXT (3, 32), hidden INTEGER, descriptionText TEXT (10, 1024), inspectionText BLOB (10, 1024), customData BLOB (10, 1024));
+
+-- Table: FeatureTypes
+CREATE TABLE IF NOT EXISTS FeatureTypes (featureTypeID INTEGER PRIMARY KEY AUTOINCREMENT, FeatureName TEXT);
+
+COMMIT TRANSACTION;
+PRAGMA foreign_keys = on;

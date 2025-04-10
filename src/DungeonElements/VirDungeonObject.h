@@ -3,6 +3,7 @@
 #include "ObjectOptions.h"
 #include <string>
 #include <unordered_map>
+//#include "../ItemSystems/PlayerItem.h"
 
 #include <vector>
 
@@ -11,6 +12,7 @@ class DungeonManager;
 class DungeonFeature;
 class DungeonObject{
     protected:
+
     std::string id;
     std::string name;
     DungeonManager* dungeonManager;
@@ -19,12 +21,18 @@ class DungeonObject{
     std::string inspectionString;// describes room in more detail, hinting at features and revealing more options 
     std::vector<PlayerChoice> playerChoices;
     std::unordered_map<std::string,DungeonFeature*> dungeonFeature;
+    //std::unordered_map<std::string,PlayerItem*> attachedItems;
     public:
     DungeonObject(std::string id, std::string name, std::string Description, std::string inspectionString);
     virtual ~DungeonObject();
 
     DungeonFeature* GetDungeonFeature(std::string);
     void AddDungeonFeature(DungeonFeature* newFeature);
+
+    //std::unordered_map<std::string,PlayerItem*> GetAttachedItems(){return attachedItems;};
+    //void AddAttachedItem(PlayerItem* newItem){attachedItems.emplace(newItem->getId(),newItem);};
+    //void RemoveAttachedItem(std::string id){attachedItems.erase(id);};
+    
     
     std::string GetID();
     std::string GetName();

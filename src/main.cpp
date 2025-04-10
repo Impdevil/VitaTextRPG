@@ -7,7 +7,7 @@
 
 
 #include <memory>
-#include "DebugLogging.h"
+#include "Systems/DebugLogging.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -16,13 +16,12 @@
 #include <string>
 
 #include <vita2d.h>
-#include "TextArea.h"
-#include "UISceneContainer.h"
-#include "UIManager.h"
-#include "InputManager.h"
-#include "DungeonManager.h"
-#include "DungeonRoom.h"
-using namespace std;
+#include "UISystems/TextArea.h"
+#include "UISystems/UISceneContainer.h"
+#include "UISystems/UIManager.h"
+#include "UISystems/InputManager.h"
+#include "DungeonElements/DungeonManager.h"
+#include "DungeonElements/DungeonRoom.h"
 
 
 UISceneContainer MainViewScene= UISceneContainer("MainViewScene");
@@ -95,17 +94,30 @@ void makeBasicDungeon(){
 	DungeonFeature* room2Feature = new DungeonFeature("e2f1","Bed covers","The bed covers seem like they are moving.",std::string("A goblin hides under the bed covers!"));
 	room2Feature->SetDungeonManager(&basicDungeon);
 	basicDungeon.AddDungeonFeature(room2Feature);
-	newRoom1->AddDungeonFeature(room2Feature);
+	dynamic_cast<DungeonObject*>(newRoom1)->AddDungeonFeature(room2Feature);
 	room2Feature->SetDiscoverible(false);
 	room2Feature->SetObjectOption(static_cast<uint32_t>(ObjectOptions::Inspect) | static_cast<uint32_t>(ObjectOptions::Open));
-	//basicDungeon.AttachNewUI(UIManager::GetInstance().GetSceneContainer("MainViewScene"));
 
+
+}
+
+void makeDBDungeon(){
+	if (!basicDungeon.LoadDungeonFromDatabase("ux0:downloads/TextAdventure.sqlite","The Test Dungeon"))
+	{
+		logToFile("Failed to load dungeon from database.");
+		makeBasicDungeon();
+	}
+	else{
+		logToFile("Dungeon loaded from database successfully.");
+	}
+	//basicDungeon.UpdateRoomUI();
 }
 
 int main(){
 	initialize();
 	createGameScene();
-	makeBasicDungeon();
+	//makeBasicDungeon();
+	makeDBDungeon();
 
 	SceCtrlData ctrl;
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG);

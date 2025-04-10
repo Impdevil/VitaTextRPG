@@ -1,0 +1,22 @@
+
+
+I want to have Dungeons stored within an sqlite database.
+Each dungeon has a set of rooms, each room must have a single door, these doors will connect at 
+least one way with another room. Some rooms have features which door inherits from, these objects
+can be hidden or have a certain skill level required to find them
+
+
+Rooms have a description, an inspection description, a name, an id, at least one door if not more.
+rooms can have features but not always, features have a description and inspection description, 
+a name, and id, these might also have certian triggers as well.
+Doors have at least 1 room they connect to, they have a description, inspection description, 
+can be hidden, can be locked and or require certian items inorder to be unlocked, they can 
+also act as triggers.
+a feature might contain items, and if the items are found they need to be able to be tracked seperately, 
+like if they are still in the room they dont need to be tracked but if they have been moved, picked up into 
+the players inventory or are placed in a different location. 
+
+inspecting a room might reveal a hidden feature that can be found with the room.
+
+export VITASDK=/usr/local/vitasdk
+export PATH=$VITASDK/bin:$PATH

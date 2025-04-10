@@ -6,7 +6,7 @@
 #include <string>
 //#include <vector>
 #include <unordered_map>
-#include "DebugLogging.h"
+#include "../Systems/DebugLogging.h"
 #include "VirDungeonObject.h"
 
 class DungeonDoor;
